@@ -1,32 +1,33 @@
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View, Button, Alert, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
+
+import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { Ionicons } from '@expo/vector-icons'
+
+import Home from './components/Home'
+import AnotherPage from './components/AnotherPage'
+
+const Tab = createBottomTabNavigator()
 
 export default function App() {
-  const [text, setText] = useState('')
-
-  const buttonPressed = () => {
-    Alert.alert('Hello', 'You typed: ' + text)
-  }
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={{ width: 200, borderColor: 'grey', borderWidth: 1 }}
-        value={text}
-        onChangeText={(text) => setText(text)}
-      />
-
-      <Button onPress={buttonPressed} title="press me"></Button>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName
+            if (route.name === 'Home') {
+              iconName = 'md-home'
+            } else if (route.name === 'AnotherPage') {
+              iconName = 'ios-help'
+            }
+            return <Ionicons name={iconName} size={size} color={color} />
+          },
+        })}
+      >
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="AnotherPage" component={AnotherPage} />
+      </Tab.Navigator>
+    </NavigationContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
